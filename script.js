@@ -125,3 +125,31 @@ if (reduceMotion) {
     renderer.render(scene, camera);
   }
 })();
+
+function openCertificate(imageSrc) {
+    const modal = document.getElementById("certificateModal");
+    const fullImage = document.getElementById("certificateFullImage");
+
+    fullImage.src = imageSrc;
+    modal.style.display = "flex";
+}
+
+function closeCertificate() {
+    document.getElementById("certificateModal").style.display = "none";
+}
+
+
+// Close when clicking outside certificate
+document.getElementById("certificateModal").addEventListener("click", function(e) {
+    if (e.target === this) {
+        closeCertificate();
+    }
+});
+
+
+// Close with Escape key
+document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+        closeCertificate();
+    }
+});
