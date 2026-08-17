@@ -35,7 +35,7 @@ if (reduceMotion) {
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(45, width/height, 0.1, 100);
-  camera.position.set(0, 0, 10);
+  camera.position.set(5, 5, 10);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -53,7 +53,7 @@ if (reduceMotion) {
   pinkLight.position.set(0, -5, -4);
   scene.add(pinkLight);
 
-  const knotGeo = new THREE.TorusKnotGeometry(1.7, 0.48, 180, 24, 2, 3);
+  const knotGeo = new THREE.TorusKnotGeometry(2.5, 0.48, 180, 24, 2, 3);
   const knotMat = new THREE.MeshPhysicalMaterial({
     color: 0x1a2050, metalness: 0.25, roughness: 0.12,
     transmission: 0.78, thickness: 1.4, ior: 1.45,
@@ -61,10 +61,10 @@ if (reduceMotion) {
     envMapIntensity: 1.5
   });
   const knot = new THREE.Mesh(knotGeo, knotMat);
-  knot.position.set(2.6, 0, -1.5);
+  knot.position.set(-2.5, 0, -1.);
   scene.add(knot);
 
-  const wireGeo = new THREE.TorusKnotGeometry(1.74, 0.5, 180, 24, 2, 3);
+ const wireGeo = new THREE.TorusKnotGeometry(2.54, 0.5, 180, 24, 2, 3);
   const wireMat = new THREE.MeshBasicMaterial({ color: 0x7df3ff, wireframe: true, transparent:true, opacity:0.35 });
   const wire = new THREE.Mesh(wireGeo, wireMat);
   wire.position.copy(knot.position);
