@@ -153,3 +153,278 @@ document.addEventListener("keydown", function(e) {
         closeCertificate();
     }
 });
+
+// ============ CERTIFICATE CAROUSEL ============
+
+(function initCertificateCarousel(){
+
+  const slides = document.querySelectorAll('.certificate-slide');
+  const dots = document.querySelectorAll('.certificate-dot');
+  const prevBtn = document.querySelector('.certificate-prev');
+  const nextBtn = document.querySelector('.certificate-next');
+  const track = document.querySelector('.certificate-track');
+
+  if(!slides.length) return;
+
+  let currentSlide = 0;
+
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+
+  // Show Slide
+  function showCertificate(index){
+
+    if(index < 0){
+      index = slides.length - 1;
+    }
+
+    if(index >= slides.length){
+      index = 0;
+    }
+
+    currentSlide = index;
+
+
+    // Remove active from all slides
+    slides.forEach((slide, i) => {
+
+      slide.classList.toggle(
+        'active',
+        i === currentSlide
+      );
+
+    });
+
+
+    // Update dots
+    dots.forEach((dot, i) => {
+
+      dot.classList.toggle(
+        'active',
+        i === currentSlide
+      );
+
+    });
+
+  }
+
+
+  // Next
+  function nextCertificate(){
+    showCertificate(currentSlide + 1);
+  }
+
+
+  // Previous
+  function previousCertificate(){
+    showCertificate(currentSlide - 1);
+  }
+
+
+  // Next Button
+  if(nextBtn){
+
+    nextBtn.addEventListener(
+      'click',
+      nextCertificate
+    );
+
+  }
+
+
+  // Previous Button
+  if(prevBtn){
+
+    prevBtn.addEventListener(
+      'click',
+      previousCertificate
+    );
+
+  }
+
+
+  // Dots
+  dots.forEach((dot, index) => {
+
+    dot.addEventListener(
+      'click',
+      () => showCertificate(index)
+    );
+
+  });
+
+
+  // ============ TOUCH SWIPE ============
+
+  if(track){
+
+    track.addEventListener(
+      'touchstart',
+      (e) => {
+
+        touchStartX =
+          e.changedTouches[0].screenX;
+
+      },
+      { passive:true }
+    );
+
+
+    track.addEventListener(
+      'touchend',
+      (e) => {
+
+        touchEndX =
+          e.changedTouches[0].screenX;
+
+        handleSwipe();
+
+      },
+      { passive:true }
+    );
+
+  }
+
+
+  function handleSwipe(){
+
+    const swipeDistance =
+      touchEndX - touchStartX;
+
+
+    // Swipe Left
+    if(swipeDistance < -50){
+
+      nextCertificate();
+
+    }
+
+
+    // Swipe Right
+    if(swipeDistance > 50){
+
+      previousCertificate();
+
+    }
+
+  }
+
+
+  // Keyboard Support
+  document.addEventListener(
+    'keydown',
+    (e) => {
+
+      // Don't change slide while typing
+      if(
+        e.target.tagName === 'INPUT' ||
+        e.target.tagName === 'TEXTAREA'
+      ){
+        return;
+      }
+
+
+      if(e.key === 'ArrowRight'){
+
+        nextCertificate();
+
+      }
+
+
+      if(e.key === 'ArrowLeft'){
+
+        previousCertificate();
+
+      }
+
+    }
+  );
+
+
+  // Start with first certificate
+  showCertificate(0);
+
+})();
+
+
+// ============ CERTIFICATE FULLSCREEN ============
+
+function openCertificate(src){
+
+  const modal =
+    document.getElementById('certificateModal');
+
+  const image =
+    document.getElementById('certificateFullImage');
+
+
+  if(!modal || !image) return;
+
+
+  image.src = src;
+
+  modal.classList.add('active');
+
+  document.body.style.overflow = 'hidden';
+
+}
+
+
+// Close Fullscreen
+function closeCertificate(){
+
+  const modal =
+    document.getElementById('certificateModal');
+
+  const image =
+    document.getElementById('certificateFullImage');
+
+
+  if(!modal || !image) return;
+
+
+  modal.classList.remove('active');
+
+  image.src = '';
+
+  document.body.style.overflow = '';
+
+}
+
+
+// Close when clicking outside image
+const certificateModal =
+  document.getElementById('certificateModal');
+
+if(certificateModal){
+
+  certificateModal.addEventListener(
+    'click',
+    function(e){
+
+      if(e.target === certificateModal){
+
+        closeCertificate();
+
+      }
+
+    }
+  );
+
+}
+
+
+// Close with ESC
+document.addEventListener(
+  'keydown',
+  function(e){
+
+    if(e.key === 'Escape'){
+
+      closeCertificate();
+
+    }
+
+  }
+);
